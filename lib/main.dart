@@ -1,98 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_analog_clock/flutter_analog_clock.dart';
+import 'package:mobile_project/Screens/nav_test_screen.dart';
+import 'package:mobile_project/Screens/test_widget_screen.dart';
+import 'Screens/test_widget.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  dotenv.load(fileName: ".env");
+
   runApp(
-    MaterialApp(
-      home: Scaffold(
-        body: testWidget(),
-      ),
+    const MaterialApp(
+      home: HomeWidget(),
     ),
   );
 }
 
-class testWidget extends StatelessWidget {
-  const testWidget({super.key});
+class HomeWidget extends StatefulWidget {
+  const HomeWidget({super.key});
 
   @override
+  State<HomeWidget> createState() => _HomeWidgetState();
+}
+
+class _HomeWidgetState extends State<HomeWidget> {
+  @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Text(
-            "Hello, flutter",
-            style: TextStyle(fontSize: 32, color: Colors.black),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+      ),
+      body: Center(
+        child: TextButton(
+          child: const Text(
+            'Go To Nav Test Screen',
+            style: TextStyle(fontSize: 26),
           ),
-          Text(
-            "Hello, student",
-            style: TextStyle(fontSize: 32, color: Colors.black),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Hello, 1",
-                style: TextStyle(fontSize: 32, color: Colors.black),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NavTestScreen(),
               ),
-              Text(
-                "Hello, 2",
-                style: TextStyle(fontSize: 32, color: Colors.black),
-              ),
-              Column(
-                children: [
-                  Text(
-                    "Hello, 3",
-                    style: TextStyle(fontSize: 32, color: Colors.black),
-                  ),
-                  Text(
-                    "Hello, 4",
-                    style: TextStyle(fontSize: 32, color: Colors.black),
-                  ),
-                  Text(
-                    "Hello, 5",
-                    style: TextStyle(fontSize: 32, color: Colors.black),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Text(
-            DateTime.now().toString(),
-            style: TextStyle(fontSize: 32, color: Colors.black),
-          ),
-          Stack(
-            children: [
-              Container(
-                width: 250,
-                height: 250,
-                color: Colors.green,
-              ),
-              Container(
-                transform: Matrix4.rotationZ(0.1),
-                width: 220,
-                height: 220,
-                color: Colors.amberAccent,
-              ),
-              Container(
-                transform: Matrix4.rotationZ(0.4),
-                width: 200,
-                height: 200,
-                color: Colors.red,
-                child: AnalogClock(
-                  dialColor: null,
-                  markingColor: Colors.teal,
-                  hourNumberColor: Colors.teal,
-                  secondHandColor: null,
-                ),
-              ),
-              Text(
-                "Stack",
-                style: TextStyle(fontSize: 24, color: Colors.black),
-              ),
-            ],
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }
