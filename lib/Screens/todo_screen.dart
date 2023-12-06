@@ -41,16 +41,67 @@ class _TodoScreenState extends State<TodoScreen> {
               ),
             ],
           ),
+          StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore
+                  .instance
+                  .collection('todo')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return CircularProgressIndicator();
+                }
 
+                return Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        final data = snapshot.data!.docs[index];
+                        return buildItem(data);
+                      },
+                      itemCount: snapshot.data!.docs.length,
+
+                    )
+                );
+
+              }
+          ),
         ],
       ),
     );
   }
 
+  Widget buildItem(DocumentSnapshot doc) {
+    final todo = Todo(doc['title'], isDone:doc['isDone']);
+
+    return ListTile(
+      onTap: () => updateTodo(doc),
+      title: Text(
+        todo.title,
+        style: todo.isDone?
+        TextStyle(decoration: TextDecoration.lineThrough,)
+            :null,
+      ),
+
+      trailing: IconButton(
+        icon: Icon(Icons.delete),
+        onPressed: () => deleteTodo(doc),
+      ),
+
+    );
+  }
   void addTodo(Todo todo) {
     FirebaseFirestore.instance
         .collection('todo')
         .add({'title':todo.title,'isDone':todo.isDone});
     textEditingController.text = '';
+  }
+
+  void updateTodo(DocumentSnapshot doc) {
+    FirebaseFirestore.instance
+        .collection('todo')
+        .doc(doc.id).update({'isDone':!doc['isDone']});
+  }
+  void deleteTodo(documentSnapshot doc) {
+    FirebaseFirestore.instance
+        .collection('isDone')
   }
 }
