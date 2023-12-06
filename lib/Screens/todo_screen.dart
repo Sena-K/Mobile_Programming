@@ -100,8 +100,10 @@ class _TodoScreenState extends State<TodoScreen> {
         .collection('todo')
         .doc(doc.id).update({'isDone':!doc['isDone']});
   }
-  void deleteTodo(documentSnapshot doc) {
+
+  void deleteTodo(DocumentSnapshot doc) {
     FirebaseFirestore.instance
-        .collection('isDone')
+        .collection('todo')
+        .doc(doc.id).delete();
   }
 }
